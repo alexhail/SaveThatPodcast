@@ -1,0 +1,7 @@
+<section class="content" page=show_guest>
+  <h1><%= @host.name %></h1>
+  <%= image_tag @host.image, class: "guest-img" %>
+  <h4 class="titles"><%= @host.titles.join(", ") %></h4>
+  <p class="episodes">Host</p>
+  <p class="bio"><%= @host.bio %></p>
+</section>

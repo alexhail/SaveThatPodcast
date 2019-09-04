@@ -1,0 +1,124 @@
+<section class="threeD-content">
+  <% episodes.each do |episode| %>
+    <div class="episode ep-p-<%= episode._eid %>">
+      <div class="episode-panel ep-<%= episode._eid %> back">
+        <h1><%= episode._eid %></h1>
+      </div>
+      <div class="episode-panel ep-<%= episode._eid %> left">
+        <h1><%= episode._eid %></h1>
+      </div>
+      <div class="episode-panel ep-<%= episode._eid %> right">
+        <h1><%= episode._eid %></h1>
+      </div>
+      <div class="episode-panel ep-<%= episode._eid %> front">
+        <h1><%= episode._eid %></h1>
+      </div>
+      <div class="episode-panel ep-<%= episode._eid %> bottom">
+        <h1><%= episode._eid %></h1>
+      </div>
+      <div class="episode-panel ep-<%= episode._eid %> top">
+        <h1><%= episode._eid %></h1>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<% content_for :javascript do %>
+  <script>
+
+    $(document).ready(function(){
+      let index = Math.floor(Math.random() * threeD_settings.length);
+
+      animationTransition_to(threeD_settings[index])
+    });
+
+    window.addEventListener("keyup", function(e){
+      switch(e.keyCode){
+        case 37:
+        case 65:
+          threeD_currentSetting = threeD_currentSetting >= 1 ? threeD_currentSetting-1 : threeD_settings.length-1;
+          animationTransition_to(threeD_settings[threeD_currentSetting]);
+          break;
+        case 39:
+        case 68:
+          threeD_currentSetting = threeD_currentSetting+1 < threeD_settings.length ? threeD_currentSetting+1 : 0;
+          animationTransition_to(threeD_settings[threeD_currentSetting]);
+          break;
+        default:
+      }
+    });
+
+    $('li[data-setting]').click(function(e){
+      threeD_currentSetting = threeD_settings.indexOf($(this).attr("data-setting"));
+      animationTransition_to(threeD_settings[threeD_currentSetting]);
+    });
+
+    <% episodes.each do |episode| %>
+      $('.episode-panel.ep-<%= episode._eid %>').click((e) => {
+        window.location = "<%= episode_path(episode._id) %>";
+      });
+    <% end %>
+  </script>
+<% end %>
+
+<% content_for :stylesheet do %>
+  <style>
+    <% episodes.each do |episode| %>
+
+      section.threeD-content.drop-down div.episode.ep-p-<%= episode._eid %> {
+        animation-direction: <%= rand > 0.5 ? "reverse" : "normal" %>;
+      }
+
+      section.threeD-content.drop-down div.episode.ep-p-<%= episode._eid %>:hover .episode-panel {
+        background-color: <%= episode.try(:color) %>;
+      }
+
+      section.threeD-content.drop-down div.episode.ep-p-<%= episode._eid %>:hover .episode-panel.front {
+        background-color: black !important;
+      }
+
+      section.threeD-content.spin div.episode.ep-p-<%= episode._eid %>:hover {
+        <% r = rand %>
+        <% if r > 0.5 %>
+          transform: translateY(-49px) rotateX(-90deg);
+        <% elsif r > 0.3 %>
+          transform: translateX(-49px) rotateY(90deg);
+        <% elsif r > 0.1 %>
+          transform: translateX(51px) rotateY(-90deg);
+        <% else %>
+          transform: translateY(51px) rotateX(90deg);
+        <% end %>
+      }
+
+      <% if r > 0.5 %>
+        section.threeD-content.spin div.episode.ep-p-<%= episode._eid %>:hover .episode-panel.top {
+          color: white;
+        }
+      <% elsif r > 0.3 %>
+        section.threeD-content.spin div.episode.ep-p-<%= episode._eid %>:hover .episode-panel.left {
+          color: white;
+        }
+        section.threeD-content.spin div.episode.ep-p-<%= episode._eid %> .episode-panel.left h1 {
+          transform: rotateY(180deg);
+        }
+      <% elsif r > 0.1 %>
+        section.threeD-content.spin div.episode.ep-p-<%= episode._eid %>:hover .episode-panel.right {
+          color: white;
+        }
+      <% else %>
+        section.threeD-content.spin div.episode.ep-p-<%= episode._eid %>:hover .episode-panel.bottom {
+          color: white;
+        }
+        section.threeD-content.spin div.episode.ep-p-<%= episode._eid %> .episode-panel.bottom h1 {
+          transform: rotateY(180deg) rotate(180deg);
+        }
+      <% end %>
+
+      section.threeD-content.spin div.episode.ep-p-<%= episode._eid %>:hover .episode-panel:not(.front):not(.back) {
+        background-color: <%= episode.try(:color) %> !important;
+      }
+
+
+    <% end %>
+  </style>
+<% end %>

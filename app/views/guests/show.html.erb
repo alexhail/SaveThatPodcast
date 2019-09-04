@@ -1,0 +1,11 @@
+<section class="content" page=show_guest>
+  <h1><%= @guest.name %></h1>
+  <%= image_tag @guest.image, class: "guest-img" %>
+  <h4 class="titles"><%= @guest.titles.join(", ") %></h4>
+  <p class="episodes">Guest for episode(s) -
+    <% Episode.find_by_has_guest(@guest._id).each do |e| %>
+      # <%= link_to e._eid, episode_path(e) %>
+    <% end %>
+  </p>
+  <p class="bio"><%= @guest.bio %></p>
+</section>

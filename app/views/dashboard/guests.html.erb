@@ -1,0 +1,39 @@
+<section class="dashboard">
+  <h1>Admin Dashboard</h1>
+  <%= render "navigation" %>
+  <h1>Guests Control Panel</h1>
+  <ul class="tools">
+    <li><%= link_to raw("<i class=\"fas fa-plus\"></i> Create Guest"), new_guest_path, class: "button primary" %></li>
+  </ul>
+  <table class="edit-hosts-table">
+    <thead>
+      <tr>
+        <% unless @guests.empty? %>
+          <% @guests.first.attributes.select {|a| [:name, :titles].include?(a.to_sym) }.keys.each do |key| %>
+            <th class=<%= key %>><%= key %></th>
+          <% end %>
+          <th class="actions">actions</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @guests.empty? %>
+        <% @guests.each do |guest| %>
+          <tr>
+            <% guest.attributes.select {|a| [:name, :titles].include?(a.to_sym) }.each do |key, value| %>
+              <td><div><%= table_format(key, value, "Guest") %></div></td>
+            <% end %>
+            <td class="actions">
+              <%= link_to raw("<div class='edit-action'><i class=\"fas fa-edit\"></i></div>"), edit_guest_path(guest._id) %>
+              <%= link_to raw("<div class='delete-action'><i class=\"fas fa-times\"></i></div>"), guest_path(guest._id), method: :delete %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <td>
+          No guests found
+        </td>
+      <% end %>
+    </tbody>
+  </table>
+</section>

@@ -1,0 +1,27 @@
+<%= form_for(@guest, method: method, html: { autocomplete: :off }) do |f| %>
+  <div class="form-content">
+    <div class="form-row">
+      <label for="guest_hid">Guest ID</label>
+      <%= f.text_field :_gid, required: true, readonly: true %>
+    </div>
+    <div class="form-row">
+      <%= f.label :name %>
+      <%= f.text_field :name, required: true %>
+    </div>
+    <div class="form-row">
+      <%= f.label :titles %>
+      <%= f.text_field :titles, value: @guest.titles.join(", "), required: true %>
+    </div>
+    <div class="form-row">
+      <%= f.label :image %>
+      <%= f.text_field :image %>
+    </div>
+    <div class="form-row">
+      <%= f.label :bio %>
+      <%= f.text_area :bio %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= f.submit method == :post ? "Create Guest" : "Update Guest", class: 'form-button' %>
+  </div>
+<% end %>

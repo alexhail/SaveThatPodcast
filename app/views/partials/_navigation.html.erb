@@ -1,0 +1,16 @@
+<section class="navigation">
+  <nav>
+    <a href="<%= episodes_path %>" class="<%= 'current-nav' if current_page?(episodes_path) %>"><i class="fas fa-broadcast-tower"></i>&nbsp;&nbsp;Episodes</a>
+    <a href="<%= hosts_path %>" class="<%= 'current-nav' if current_page?(hosts_path) %>"><i class="fas fa-user-astronaut"></i>&nbsp;&nbsp;Hosts</a>
+    <a href="<%= guests_path %>" class="<%= 'current-nav' if current_page?(guests_path) %>"><i class="fas fa-male"></i><i class="fas fa-male"></i><i class="fas fa-male"></i>&nbsp;&nbsp;Guests</a>
+  </nav>
+
+  <div id="social-media-nav">
+    <ul class="horizontal menu">
+      <li hover-text = "SoundCloud" onclick="window.location='https://soundcloud.com/savethatpodcast';StatBuilder_addSMTick('soundcloud');"><i class='fab fa-soundcloud'></i></li>
+      <li hover-text = "Twitter" onclick="window.location='https://twitter.com/savethatpodcast';StatBuilder_addSMTick('twitter');"><i class='fab fa-twitter'></i></li>
+      <li hover-text = "Instagram" onclick="window.location='https://www.instagram.com/savethat_podcast';StatBuilder_addSMTick('instagram');"><i class='fab fa-instagram'></i></li>
+      <li hover-text = "iTunes" onclick="window.location='https://itunes.apple.com/us/podcast/save-that-podcast/id1397604675';StatBuilder_addSMTick('itunes');"><i class="fas fa-podcast"></i></li>
+    </ul>
+  </div>
+</section>

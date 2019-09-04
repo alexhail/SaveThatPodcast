@@ -1,0 +1,20 @@
+<section class="splash-content">
+  <div class="splash-background-animation"></div>
+  <%= render partial: 'partials/episode_block_list' %>
+</section>
+
+<% content_for :javascript do %>
+  <script>
+    $('img').click(function(){
+      window.location = "<%= episodes_path %>"
+    });
+
+    if(typeof el === "undefined" || el === null){
+      let el = document.querySelector(".full-site-tip");
+
+      el.addEventListener("click", function(e){
+        window.location = "<%= episodes_path %>"
+      });
+    }
+  </script>
+<% end %>

@@ -1,0 +1,39 @@
+<section class="dashboard">
+  <h1>Admin Dashboard</h1>
+  <%= render "navigation" %>
+  <h1>Hosts Control Panel</h1>
+  <ul class="tools">
+    <li><%= link_to raw("<i class=\"fas fa-plus\"></i> Create Host"), new_host_path, class: "button primary" %></li>
+  </ul>
+  <table class="edit-hosts-table">
+    <thead>
+      <tr>
+        <% unless @hosts.empty? %>
+          <% @hosts.first.attributes.select {|a| [:name, :titles].include?(a.to_sym) }.keys.each do |key| %>
+            <th class=<%= key %>><%= key %></th>
+          <% end %>
+          <th class="actions">actions</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @hosts.empty? %>
+        <% @hosts.each do |host| %>
+          <tr>
+            <% host.attributes.select {|a| [:name, :titles].include?(a.to_sym) }.each do |key, value| %>
+              <td><div><%= table_format(key, value, "Host") %></div></td>
+            <% end %>
+            <td class="actions">
+              <%= link_to raw("<div class='edit-action'><i class=\"fas fa-edit\"></i></div>"), edit_host_path(host._id) %>
+              <%= link_to raw("<div class='delete-action'><i class=\"fas fa-times\"></i></div>"), host_path(host._id), method: :delete %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <td>
+          No hosts found
+        </td>
+      <% end %>
+    </tbody>
+  </table>
+</section>

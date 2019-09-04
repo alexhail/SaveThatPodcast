@@ -1,0 +1,93 @@
+section.content[page=edit_guest]{
+  textarea {
+    background-color: black;
+    color: white;
+    height: 200px;
+    width: 100%;
+    padding: 15px;
+  }
+}
+
+section.content[page=guests_index] {
+
+  div.guests-container {
+    text-align: center;
+
+    a {
+      text-decoration: none;
+    }
+
+    div.guest {
+      position: relative;
+      display: inline-block;
+      margin: 30px;
+      overflow-y:hidden;
+      height: 200px;
+      cursor: pointer;
+
+      img {
+        width: 200px;
+      }
+
+      &:hover div.guest-onhover {
+        transform: translateY(0);
+      }
+
+      div.guest-onhover:hover {
+        transform: translateY(100%);
+      }
+
+      div.guest-onhover {
+        position: absolute;
+        bottom: 0;
+        width: 170px;
+        background-color: #151515F0;
+        padding: 15px;
+        transform: translateY(100%);
+        pointer-events: none;
+        z-index: 2;
+
+        h3 {
+          text-align: left;
+        }
+
+        p {
+          margin: 0;
+          text-align: left;
+        }
+      }
+    }
+  }
+}
+
+section.content[page=show_guest] {
+  padding-bottom: 60px;
+
+  img.guest-img {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+  }
+
+  h4.titles {
+    margin: 30px auto;
+    padding: 15px 0;
+    width: 200px;
+    background-color: rgba(25,25,25,1);
+  }
+
+  p.episodes {
+    margin: 30px auto;
+    padding: 15px;
+    width: 250px;
+    background-color: rgba(25,25,25,1);
+    text-align: center;
+  }
+
+  p.bio {
+    width: 600px;
+    margin: 30px auto;
+    padding: 15px;
+    background-color: rgba(25,25,25,1);
+  }
+}

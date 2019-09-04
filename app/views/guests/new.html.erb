@@ -1,0 +1,5 @@
+<section class="content">
+  <h1>Creating New Guest</h1>
+  <%= render 'form', guest: @guest, method: :post %>
+  <%= link_to 'Back', dashboard_guests_path, class: "back button centered" %>
+</section>

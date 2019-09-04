@@ -1,0 +1,15 @@
+<% flash.each do |key, value| %>
+  <% unless value.split(" ").map(&:downcase).include?("admin") %>
+    <div class="flash_<%= type %>_<%= key %>">
+      <p class="flash_content">
+        <i class="<%= flash_icon(key) %>"></i> <%= value %>
+      </p>
+    </div>
+  <% else %>
+    <div class="flash_<%= type %>_admin">
+      <p class="flash_content">
+        <i class="<%= flash_icon('admin') %>"></i> <%= value %>
+      </p>
+    </div>
+  <% end %>
+<% end %>

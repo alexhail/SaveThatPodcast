@@ -1,0 +1,15 @@
+<section class="content" page="hosts">
+  <div>
+    <h1>Hosts</h1>
+
+    <% @hosts.each do |h| %>
+      <div>
+        <% unless h.try(:image).blank? %>
+          <img src="<%= h.image %>" alt="">
+        <% end %>
+        <h2 class="name"><%= link_to h.try(:name), host_path(h) %></h2>
+      </div>
+    <% end %>
+  </div>
+</section>
+<% render 'partials/mini-enav' %>

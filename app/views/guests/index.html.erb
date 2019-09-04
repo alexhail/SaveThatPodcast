@@ -1,0 +1,19 @@
+<section class="content" page="guests_index">
+  <h1>Guests</h1>
+  <div class="guests-container">
+    <% @guests.each do |g| %>
+      <a href="<%= guest_path(g.id) %>">
+        <div class="guest">
+          <img src="<%= g.image %>" alt="">
+          <div class="guest-onhover">
+            <h3><%= g.name %></h3>
+            <p>Episodes -
+            <% Episode.find_by_has_guest(g._id).each do |e| %>
+              #<%= e._eid %>
+            <% end %>
+          </div>
+        </div>
+      </a>
+    <% end %>
+  </div>
+</section>

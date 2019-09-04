@@ -1,0 +1,5 @@
+<section class="content" page="edit_host">
+  <h1>Editing Host - <%= @host.name %></h1>
+  <%= render 'form', host: @host, method: :patch %>
+  <%= link_to 'Back', dashboard_hosts_path, class: "back button centered" %>
+</section>

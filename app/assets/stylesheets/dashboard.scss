@@ -1,0 +1,178 @@
+section.dashboard {
+  background-color: rgba(0,0,0,0.7);
+  min-height: calc(100vh - 45px);
+  padding-top: 45px;
+
+  .content {
+
+    .panel {
+      display: inline-block;
+      margin: 0;
+
+      ul {
+        li {
+          span {
+            float: right;
+            font-weight: 900;
+            background-color: #131313;
+            line-height: 51px;
+            margin-top: -15px;
+            min-width: 50px;
+            padding: 0 15px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            box-sizing: border-box;
+          }
+        }
+      }
+    }
+  }
+
+  h1 {
+    padding: 15px 0;
+    margin: 0;
+  }
+
+  ul.tools {
+    list-style-type: none;
+    width: 80%;
+    padding: 0;
+    margin: 15px auto;
+    list-style-position: inside;
+    text-align: right;
+    background-color: rgba(0,0,0,0);
+  }
+
+  ul:not(.tools) {
+    margin: 0;
+    padding: 15px 15px;
+
+    li {
+      background-color: #161618;
+      list-style-type: none;
+      padding: 15px;
+      margin: 0 auto;
+      border-bottom: 2px solid rgba(255,255,255,0.25);
+
+      ul {
+
+        li {
+          margin: 0;
+          width: auto;
+        }
+      }
+
+      p {
+        font-size: 12px;
+        color: rgba(255,255,255,0.5);
+      }
+    }
+  }
+
+  h3 {
+    height: 60px;
+    line-height: 60px;
+    background-color: #111111;
+  }
+
+  hr {
+    background-color: black;
+    margin: 0;
+  }
+
+  select {
+    display: inline-block;
+    padding: 0 10px;
+    height: 25px;
+    background-color: black;
+    color: white;
+    border: none;
+  }
+
+  input, select, textarea {
+    float: right;
+  }
+
+  #edit-color.settings ~ .sp-replacer.sp-light {
+    float: right;
+    margin: -8px;
+    padding-right: 2px;
+  }
+
+  input#background_image {
+    margin: -8px -2px;
+    width: 250px;
+  }
+
+  input#new_font {
+    width: 250px;
+  }
+}
+
+
+nav.dashboard {
+  text-align: center;
+  background-color: rgba(0,0,0,0.5);
+  height: auto !important;
+
+  a {
+    background-color: rgba(15,15,15,1);
+    min-width: 40px;
+    height: 45px;
+    padding: 15px;
+
+    &:hover {
+      background-color: lighten(rgba(15,15,15,1), 15%);
+    }
+
+    i.fa-crown {
+      padding: 12px 0;
+      color: #FFD700;
+    }
+  }
+}
+
+a#admin-link {
+  position: absolute;
+  display: block;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  bottom: 0;
+  opacity: 0;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  line-height: 45px;
+
+  &:hover {
+    opacity: 0.6;
+  }
+
+  i.fa-crown {
+    color: #FFD700;
+  }
+}
+
+section.dashboard table tr.hidden-row {
+
+  td {
+    background-color: rgba(255,255,255,0.2);
+  }
+}
+
+input#background_image {
+  padding: 0px 10px;
+}
+
+input#admin_pin {
+  background-color: black;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 5px;
+  width: 177px;
+  height: 17px;
+}
+
+form#edit_setting {
+  margin: 0;
+}

@@ -1,0 +1,5 @@
+<section class="content" page="edit_guest">
+  <h1>Editing Guest - <%= @guest.name %></h1>
+  <%= render 'form', guest: @guest, method: :patch %>
+  <%= link_to 'Back', dashboard_guests_path, class: "back button centered" %>
+</section>

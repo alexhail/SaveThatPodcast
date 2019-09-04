@@ -1,0 +1,7 @@
+<div id="mini-enav">
+  <ul>
+    <% Episode.all.each do |e| %>
+      <a href="<%= episode_path(e) %>"><li><%= e._eid %></li></a>
+    <% end %>
+  </ul>
+</div>

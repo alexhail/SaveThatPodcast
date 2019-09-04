@@ -1,0 +1,30 @@
+#mini-enav {
+  position: absolute;
+  display: block;
+  top: 45px;
+  left: 0;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    a {
+      text-decoration: none;
+    }
+
+    li {
+      display: block;
+      width: 45px;
+      height: 45px;
+      line-height: 45px;
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(255,255,255,0.35);
+      }
+    }
+  }
+}

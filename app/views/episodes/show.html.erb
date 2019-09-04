@@ -1,0 +1,141 @@
+<section class="content">
+  <div class="inner-wrap">
+    <% if admin_signed_in? %>
+      <p><%= link_to raw("<i class=\"fas fa-edit\"></i> Edit Episode"), edit_episode_path(@episode._id), class: "button primary" %></p>
+    <% end %>
+    <div class="main-header">
+      <h1 class="header id">Episode <%= @episode.try(:_eid) %></h1>
+      <h1 class="header title"><%= @episode.try(:title) %></h1>
+    </div>
+    <div class="content-row">
+      <div class="panel panel_date-added">
+        <h5 class="date-added">Hosts - Guests</h5>
+      </div>
+        <div class="panel panel_description">
+          <h5 class="hosts-guests">
+            <%= episode_hosts(@episode) %><%= episode_guests(@episode) %>
+          </h5>
+        </div>
+    </div>
+    <div class="content-row">
+      <div class="panel panel_date-added">
+        <h5 class="date-added"><%= @episode.try(:date_added) %></h5>
+      </div>
+
+      <% if @episode.try(:is_aggregate_episode) == true %>
+        <div class="panel panel_description">
+          <% unless @episode.try(:parts).blank? %>
+            <% @episode.parts.each_with_index do |part, idx| %>
+              <h5 class="label part-label" part="<%= idx %>"><span class="part-id">Part <%= idx+1 %> <%= part["title"].empty? ? '' : '- '+part["title"] %></span><p class="part-date"><%= part["date_added"] %></p></h5>
+              <div class="part-content" part="<%= idx %>" open=true>
+                <p class="part-description"><%= part["description"].html_safe %></p>
+                <% unless part["episode_link"].blank? %>
+                  <p class="part-episode-link aggregate"><%= link_to raw('<i class=\'fas fa-microphone-alt\'></i> &nbsp;&nbsp;Episode'), part["episode_link"] %></p>
+                <% end %>
+                <% unless part["track_link"].blank? %>
+                  <p class="part-track-link aggregate"><%= link_to raw('<i class=\'fas fa-music\'></i> &nbsp;&nbsp;Track'), part["track_link"] %></p>
+                <% end %>
+                </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+      <div class="panel panel_description">
+        <p class="description"><%= @episode.try(:description) ? @episode.description.html_safe : "" %></p>
+        <% unless @episode.try(:episode_link).blank? %>
+          <p class="part-episode-link"><%= link_to raw('<i class=\'fas fa-microphone-alt\'></i> &nbsp;&nbsp;Episode'), @episode.try(:episode_link) %></p>
+        <% end %>
+        <% unless @episode.try(:track_link).blank? %>
+          <p class="part-track-link"><%= link_to raw('<i class=\'fas fa-music\'></i> &nbsp;&nbsp;Track'), @episode.try(:track_link) %></p>
+        <% end %>
+      </div>
+      <% end %>
+    </div>
+
+    <% unless @episode.try(:more).empty? %>
+    <div class="content-row">
+      <div class="panel panel_date-added">
+        <h5 class="date-added">More</h5>
+      </div>
+      <div class="panel panel_description">
+        <% unless @episode_links.empty? && @episode_pictures.empty? %>
+          <% unless @episode_links.empty? %>
+
+            <div class="flex-row links">
+              <h5 class="label part-label editing flex-fill more" part="links">Links</h5>
+            </div>
+            <div class="part-content" open=true part="links">
+              <ul class="episode-links-list">
+                <% @episode_links.each_with_index do |m, i| %>
+                  <li>
+                   <u><%= link_to m["title"], m["url"] %></u> <%= '-' unless m["description"].blank? %> <%= m["description"] %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <% unless @episode_pictures.empty? %>
+            <div class="flex-row pictures">
+              <h5 class="label part-label editing flex-fill more" part="pictures">Pictures from Episode <%= @episode._eid %></h5>
+            </div>
+            <div class="part-content" open=true part="pictures">
+              <ul class="episode-pictures-list">
+                <% @episode_pictures.each_with_index do |m, i| %>
+                  <li>
+                    <img src="<%= m['url'] %>" alt=" 404 Image Not Found">
+                    <%= m["title"] %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</section>
+
+<% content_for :stylesheet do %>
+  <style>
+    .header, .panel {
+      border-color: <%= @episode.try(:color) %> !important;
+    }
+
+    .part-episode-link, .episode-link, .part-track-link, .track-link {
+      background-color: <%=@episode.try(:color) %>be !important;
+    }
+  </style>
+<% end %>
+
+<% if @episode.try(:is_aggregate_episode) == true  %>
+  <% content_for :javascript do %>
+    <script>
+      let partLabels = document.querySelectorAll(".part-label");
+      let partIsOpen = (partID) => {
+        return document.querySelector(".part-content[part=\""+partID+"\"]").getAttribute("open") == "true";
+      }
+
+      let togglePart = (partID) => {
+        let part = document.querySelector(".part-content[part=\""+partID+"\"]");
+
+        if (partIsOpen(partID)) {
+          part.style.display = "none";
+          part.style.height = "0px";
+          part.setAttribute("open", "false");
+        } else {
+          part.style.display = "block";
+          part.style.height = "auto";
+          part.setAttribute("open", "true");
+        }
+      }
+
+      for(let i = 0; i < partLabels.length; i++){
+        partLabels[i].addEventListener("click", function(e){
+          togglePart(partLabels[i].getAttribute("part"));
+        });
+      }
+
+    </script>
+  <% end %>
+<% end %>

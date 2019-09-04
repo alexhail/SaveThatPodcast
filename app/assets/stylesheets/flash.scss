@@ -1,0 +1,76 @@
+$flash-font-color:           rgba(255, 255, 255, 1);
+$flash-notice-background:    #022E54;
+$flash-alert-background:     rgba(255, 65, 65, 1);
+$flash-admin-background:     #151516;
+
+div[class*=flash_app] {
+  position: fixed;
+  display: block;
+  max-width: 45%;
+  max-height: 15%;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 5px;
+
+  animation-name: flash_app_slideInOut;
+  animation-duration: 6s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+
+  border: 2px solid rgba(255, 255, 255, 0.5);
+
+  z-index: 99;
+
+  &[class*=notice] {
+    background-color: $flash-notice-background;
+  }
+
+  &[class*=alert] {
+    background-color: $flash-alert-background;
+  }
+
+  &[class*=admin] {
+    background-color: $flash-admin-background;
+
+    & i {
+      color: #FFD700;
+    }
+  }
+
+  p.flash_content {
+    margin: 0;
+
+    i {
+      padding-right: 6px;
+    }
+  }
+}
+
+div[class*=flash_login] {
+  padding: 1px 0;
+
+  &[class*=notice] {
+    background-color: rgba(60, 104, 126, 0.25);
+  }
+
+  &[class*=alert] {
+    background-color: rgba(255, 65, 65, 0.25);
+  }
+}
+
+@keyframes flash_app_slideInOut {
+  0% {
+    bottom: -15%;
+  }
+  12% {
+    bottom: 0px;
+  }
+  88% {
+    bottom: 0px;
+  }
+  100% {
+    bottom: -15%;
+  }
+}

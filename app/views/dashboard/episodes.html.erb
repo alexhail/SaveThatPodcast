@@ -1,0 +1,43 @@
+<section class="dashboard">
+  <h1>Admin Dashboard</h1>
+  <%= render "navigation" %>
+  <h1>Episodes Control Panel</h1>
+  <ul class="tools">
+    <li><%= link_to raw("<i class=\"fas fa-plus\"></i> Create Episode"), episodes_path, method: :post, class: "button primary" %></li>
+  </ul>
+  <table class="edit-hosts-table">
+    <thead>
+      <tr>
+        <% unless @episodes.empty? %>
+          <% @fields.reject {|x| x == "page_visits" }.each do |key| %>
+            <th class=<%= key %>><%= key %></th>
+          <% end %>
+          <th class="actions">actions</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @episodes.empty? %>
+        <% @episodes.each do |episode| %>
+          <tr class="<%= episode.visible ? '' : 'hidden-row' %>">
+            <% @fields.reject {|x| x == "page_visits" }.each do |key| %>
+              <td>
+                <div>
+                  <%= episode_attribute(key, episode) %>
+                </div>
+              </td>
+            <% end %>
+            <td class="actions">
+              <%= link_to raw("<div class='edit-action'><i class=\"fas fa-edit\"></i></div>"), edit_episode_path(episode._id) %>
+              <%= link_to raw("<div class='delete-action'><i class=\"fas fa-times\"></i></div>"), episode_path(episode._id), method: :delete, data: { confirm: "Are you sure you want to delete this episode? (Episode "+episode._eid.to_s+")"} %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <td>
+          No episodes found
+        </td>
+      <% end %>
+    </tbody>
+  </table>
+</section>

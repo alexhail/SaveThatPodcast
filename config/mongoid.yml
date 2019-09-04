@@ -1,0 +1,16 @@
+defaults: &defaults
+  clients:
+    default:
+      database: savethat
+      hosts:
+        - -------------:27017
+      options:
+        user: '-----------------'
+        password: '---------------'
+        auth_source: admin
+
+development:
+  <<: *defaults
+
+production:
+  <<: *defaults

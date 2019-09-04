@@ -1,0 +1,366 @@
+<%= form_for(@episode, method: :patch, html: { autocomplete: "off",  class: "admin-tools-form" }) do |f| %>
+<section class="content">
+  <div class="inner-wrap">
+    <div class="admin-tools">
+      <ul>
+        <li><%= submit_tag "Save Changes", class: "button primary" %></input></li>
+        <li><%= link_to "Stop Editing", episode_path(params[:id]), class: "button primary reset" %></li>
+        <li><%= link_to "Reset Changes", edit_episode_path(params[:id]), class: "button primary red reset" %></li>
+         <li><%= link_to "Reset Entire Episode", edit_episode_path(params[:id]), class: "button primary red reset" %></li>
+      </ul>
+      <ul>
+        <li>
+          <div class="edit-color">Episode Visible? <%= f.check_box :visible %></div>
+        </li>
+        <li>
+          <div class="admin-actions">
+            Delete this episode
+            <%= link_to raw("<div class='delete-action'><i class=\"fas fa-times\"></i></div>"), episode_path(params[:id]), method: :delete, data: { confirm: "Are you sure you want to delete this episode? (Episode "+@episode._eid.to_s+")"} %>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+    
+    <div class="admin-tools">
+      <ul>
+        <li>
+          <div class="edit-color"><%= label_tag "Add Host" %>
+          <%= select_tag :new_host, options_for_select(@host_options, @host_options[0]) %></div>
+        </li>
+        <li>
+          <div class="edit-color"><%= label_tag "Add Guest" %>
+          <%= select_tag :new_guest, options_for_select(@guest_options, @guest_options[0]) %></div>
+        </li>
+        <li>
+          <div class="edit-color">Edit episode color </div><input id="edit-color" type="text">
+          <%= f.hidden_field :color %>
+        </li>
+        <li>
+          <div class="edit-color">Aggregate Episode? </div>
+          <%= f.check_box :is_aggregate_episode %>
+        </li>
+        <li>
+          <div class="edit-color">Edit date added </div><%= f.text_field :date_added, id: "datepicker" %>
+        </li>
+        <% if @episode.is_aggregate_episode %>
+          <li>
+            <div class="edit-color">Add part <%= link_to "+ Part", add_part_path, method: :patch, class: 'add-part' %></div>
+          </li>
+          <li>
+            <div class="edit-color">Remove part <%= select_tag "index", options_for_select(@parts_options, @parts_options[0]) %><%= link_to "- Part", "#", class: 'remove-part' %></div>
+          </li>
+        <% end %>
+        <li>
+          <div id="attach-more" class="edit-color">Attach link or picture <%= link_to "+ Add Link", "#", class: 'add-more' %> | <%= link_to "+ Add Picture", "#", class: 'add-more' %> <small> Click the red 'X's to remove attachments</small>
+            <div class="attach-more-container">
+              <div class="edit-color">
+                <p class="close-add-part">Close</p>
+                <p class="head">
+                  Enter the external URL and title of the link/picture you are adding
+                  Then just hit "Add Link" or "Add Picture" again
+                </p>
+                <p>For pictures make sure you use <u><a href="https://image.ibb.co/j0Cs5V/bryan.jpg">direct links</a></u></p>
+                <small>Title</small>
+                <%= text_field_tag "more_title" %>
+                <small>URL</small>
+                <%= text_field_tag "more_url" %>
+                <small>Description*</small><p style="display:inline-block;">&nbsp;(optional)</p>
+                <%= text_area_tag "more_description" %>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <% unless @empty_fields.blank? %>
+        <p style="margin: 0; padding: 15px; color: rgba(255,255,255,0.5);">
+          <i class="fas fa-exclamation-circle"></i> 
+           You have empty fields in your episode
+           <ul class="empty-fields-ul">
+            <% @empty_fields.each do |field| %>
+              <li>- <%= field %></li>
+            <% end %>
+           </ul>
+        </p>
+      <% end %>
+    </div>
+
+    <div class="main-header">
+      <h1 class="header id">Episode <%= @episode.try(:_eid) %><br>
+        <% if @episode._eid == 0 %>
+          <span style="font-size:12px;color:rgba(255,255,255,0.5);">
+            Episode ID will auto correct upon making this episode visible
+          </span>
+        <% end %>
+      </h1>
+      <h1 class="header title">
+        <span style="font-size:25px;color:rgba(255,255,255,0.8);padding-right:30px;float: left;">
+          <%= @episode.title.empty? ? raw("Add an episode title<br>") : "" %>
+        </span>
+        <%= f.text_field :title, class: "episode-input" %>
+      </h1>
+    </div>
+
+    <div class="content-row">
+      <div class="panel panel_date-added">
+        <h5 class="date-added">Hosts - Guests</h5>
+      </div>
+        <div class="panel panel_description">
+          <h5 class="hosts-guests">
+            <% if @episode.hosts.empty? && @episode.guests.empty? %>
+              <span style="font-size:16px;color:rgba(255,255,255,0.8);padding-right:30px;">
+                Add hosts or guests with the drop downs above
+              </span>
+            <% end %>
+            <%= episode_hosts(@episode) %><%= episode_guests(@episode) %>
+          </h5>
+        </div>
+    </div>
+
+    <div class="content-row">
+      <div class="panel panel_date-added">
+        <h5 class="date-added"><%= @episode.try(:is_aggregate_episode) ? "Parts": @episode.try(:date_added) %></h5>
+      </div>
+
+      <% if @episode.try(:is_aggregate_episode) == true %>
+        <div class="panel panel_description">
+          <% unless @episode.try(:parts).blank? %>
+            <% @episode.parts.each_with_index do |part, idx| %>
+              <div class="flex-row">
+                <h5 class="label part-label editing flex-fill" part="<%= idx %>">Part <%= idx+1 %> title<span class="part-title flex-fill"><%= text_field_tag "part_#{idx}_title", part["title"] %></span></h5>
+                <h5 class="label part-label editing flex-fill" part="<%= idx %>">Part <%= idx+1 %> date added<span class="part-date no-float"><%= text_field_tag "part_#{idx}_date_added", part["date_added"] %></span></h5>
+              </div>
+              <div class="part-content" part="<%= idx %>" open=true>
+                <label>Part <%= idx+1 %> Description</label>
+                <p class="part-description"><%= text_area_tag "part_#{idx}_description", part["description"] %></p>
+                <label>Part <%= idx+1 %> Episode Link</label>
+                <p><%= text_field_tag "part_#{idx}_episode_link", part["episode_link"] %></p>
+                <label>Part <%= idx+1 %> Track Link</label>
+                <p><%= text_field_tag "part_#{idx}_track_link", part["track_link"] %></p>
+              </div>
+            <% end %>
+          <% else %>
+            <p style="font-size:22px;color:rgba(255,255,255,0.8);margin:30px;">
+              Add parts to this aggregate episode
+            </p>
+          <% end %>
+        </div>
+      <% else %>
+      <div class="panel panel_description">
+        <p class="description">
+          <label>Episode description </label>
+          <%= f.text_area :description, class: "episode-input" %>
+        </p>
+        <p>
+          <label class="link-label">Episode link </label>
+          <%= f.text_field :episode_link %>
+        </p>
+        <p>
+          <label class="link-label">Track link </label>
+          <%= f.text_field :track_link %>
+        </p>
+      </div>
+      <% end %>
+    </div>
+
+    <div class="content-row">
+      <div class="panel panel_date-added">
+        <h5 class="date-added">More</h5>
+      </div>
+      <div class="panel panel_description">
+        <% unless @episode_links.empty? && @episode_pictures.empty? %>
+          <% unless @episode_links.empty? %>
+
+            <div class="flex-row links">
+              <h5 class="label part-label editing flex-fill">Links</h5>
+            </div>
+            <div class="part-content" open=true>
+              <ul class="episode-links-list">
+                <% @episode_links.each_with_index do |m, i| %>
+                  <li class="more remove-link" data-link-index=<%= i %>>
+                    <i class="fas fa-times more remove-link" data-link-index=<%= i %> style="color:red;"></i> &nbsp;&nbsp;<u><%= link_to m["title"], m["url"] %></u> <%= '-' unless m["description"].blank? %> <%= m["description"] %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <% unless @episode_pictures.empty? %>
+            <div class="flex-row pictures">
+              <h5 class="label part-label editing flex-fill">Pictures from Episode <%= @episode._eid %></h5>
+            </div>
+            <div class="part-content" open=true>
+              <ul class="episode-pictures-list">
+                <% @episode_pictures.each_with_index do |m, i| %>
+                  <li class="more remove-picture" data-picture-index=<%= i %>>
+                    <i class="fas fa-times more remove-picture" data-picture-index=<%= i %> style="color:red;"></i> <img src="<%= m['url'] %>" alt=" 404 Image Not Found">
+                    <%= m["title"] %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        <% else %>
+          <p style="font-size:22px;color:rgba(255,255,255,0.8);margin:30px;">
+            Add more to this episode like links and pictures
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</section>
+
+<% content_for :stylesheet do %>
+  <style>
+    .header, .panel {
+      border-color: <%= @episode.try(:color) %> !important;
+    }
+
+    .part-episode-link, .episode-link, .part-track-link, .track-link {
+      background-color: <%=@episode.try(:color) %>be !important;
+    }
+  </style>
+<% end %>
+
+<% content_for :javascript do %>
+  <script>
+    $(document).ready(function(){
+
+      $('select#index ~ a').click(function(){
+        $.ajax({
+          type: "PATCH",
+          url: '/episodes/<%= params[:id] %>/remove_part/'+$('select#index').val()
+        });
+      });
+
+      $('.add-more').click(function(e){
+        e.preventDefault();
+
+        let amc = $('.attach-more-container');
+
+        if(!amc.attr('open')){
+          $('.attach-more-container').css('display', 'block');
+          $('.attach-more-container').attr('open', true);
+        } else {
+          // Check which one was pressed (link or pic) by using their innerHTML (cause why not right?)
+          let more_type = "";
+
+          if($(this).html().indexOf("Link") !== -1) {
+            more_type = "link";
+          } else if($(this).html().indexOf("Picture") !== -1) {
+            more_type = "picture";
+          }
+
+          // Send the ajax patch request and close the container
+          let params = {
+            "type": more_type,
+            "title": $('input#more_title').val(),
+            "url": $('input#more_url').val(),
+            "description": $('textarea#more_description').val()
+          }
+
+          $.ajax({
+            type: "PATCH",
+            url: '/episodes/<%= params[:id] %>/add_more',
+            data: params,
+            success: function(){
+              if(amc.attr('open')){
+                $('.attach-more-container').css('display', 'none');
+                $('.attach-more-container').attr('open', false);
+              }
+            }
+          });
+        }
+      });
+
+      $('.close-add-part').click(function(e){
+        e.preventDefault();
+
+        let amc = $('.attach-more-container');
+
+        if(amc.attr('open')){
+          $('.attach-more-container').css('display', 'none');
+          $('.attach-more-container').attr('open', false);
+        }
+      });
+
+      $('i.more.remove-link').each(function(){
+        $(this).click(function(){
+          let index = $(this).attr('data-link-index');
+
+          let params = {
+            "index": index
+          }
+
+          $.ajax({
+            type: "PATCH",
+            url: '/episodes/<%= params[:id] %>/remove_link',
+            data: params,
+            success: function(){
+              $('li.more.remove-link[data-link-index="'+index+'"').remove();
+            }
+          });
+        });
+      });
+
+      $('i.more.remove-picture').each(function(){
+        $(this).click(function(){
+          let index = $(this).attr('data-picture-index');
+
+          let params = {
+            "index": index
+          }
+
+          $.ajax({
+            type: "PATCH",
+            url: '/episodes/<%= params[:id] %>/remove_picture',
+            data: params,
+            success: function(){
+              $('li.more.remove-picture[data-picture-index="'+index+'"').remove();
+            }
+          });
+        });
+      });
+
+      $('i[class*=remove]:not(i.remove-picture, i.remove-link)').each(function(){
+        $(this).on("click", (e) => {
+          let params = {}
+
+          if($(this).hasClass("remove-crew")){
+            params = {
+              remove_all_hosts: true
+            }
+          } else if($(this).hasClass("remove-host")) {
+            params = {
+              remove_host: $(this).attr("data-host-id")
+            }
+          } else if($(this).hasClass("remove-guest")) {
+            params = {
+              remove_guest: $(this).attr("data-guest-id")
+            }
+          }
+
+          $.ajax({
+            type: "PATCH",
+            url: '/episodes/<%= params[:id] %>/remove_hosts_guests',
+            data: params
+          });
+        });
+      });
+    });
+
+    $("#datepicker, [id*=_date_added]").datepicker({
+      dateFormat: 'd MM yy'
+    });
+
+    $("#edit-color").spectrum({
+      color: "<%= @episode.color %>",
+      showInput: true,
+      allowEmpty: false,
+      preferredFormat: "hex",
+      change: function(color){
+        $('#episode_color').val(color.toHexString());
+      }
+    });
+  </script>
+<% end %>

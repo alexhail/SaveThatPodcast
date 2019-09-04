@@ -1,0 +1,90 @@
+var threeD_settings = ["drop-down", "spin"/*, "flying"*/];
+var threeD_currentSetting = 0;
+
+function animationTransition_to(setting){
+  $('ul.controller li i[class*=circle]').attr("class", "far fa-circle")
+  $('li[data-setting="'+setting+'"] i[class*=circle]').attr("class", "fas fa-circle");
+
+  if(setting == "spin") return animationTransitionTo_spin();
+  if(setting == "drop-down") return animationTransitionTo_dropDown();
+
+  return animationTransitionTo_dropDown();
+}
+
+function animationTransitionTo_spin() {
+  let classList = $('section.threeD-content').attr("class").split(' ');
+
+  for(let i = 0; i < classList.length; i++){
+    if(classList[i] !== "threeD-content")
+      $('section.threeD-content').removeClass(classList[i]);
+  }
+
+  $('section.threeD-content').addClass("spin");
+
+  var spacingIndex = 0;
+  var spacingInterval = 102;
+  var startY = 250;
+  var startX = (window.innerWidth/2)-(spacingInterval*1.5);
+  var rowLength = 4;
+
+  $('.episode').velocity({
+    top: () => { return startY + (spacingInterval * (Math.floor(spacingIndex / rowLength))) + "px"; },
+    left: () => { return startX + (spacingInterval * (spacingIndex++ % rowLength)) + "px"; },
+    opacity: 1,
+  }, {
+    duration: 500,
+    easing: "ease-out"
+  });
+}
+
+function animationTransitionTo_dropDown() {
+  let classList = $('section.threeD-content').attr("class").split(' ');
+
+  for(let i = 0; i < classList.length; i++){
+    if(classList[i] !== "threeD-content")
+      $('section.threeD-content').removeClass(classList[i]);
+  }
+
+  $('section.threeD-content').addClass("drop-down");
+
+  var spacingIndex = 0;
+  var spacingInterval = 75
+  var startX = (window.innerWidth/2)-((spacingInterval/2)*document.querySelectorAll(".episode").length);
+  var startY = 250;
+  $('.episode').velocity({
+    top: startY,
+    left: () => { return startX + (spacingInterval * spacingIndex++) + "px"; },
+    opacity: 1,
+  }, {
+    duration: 500,
+    easing: "ease-out"
+  });
+}
+
+function exists(selector){
+  return $(selector).length > 0;
+}
+
+function get(selector){
+  if(exists(selector))
+    return document.querySelector(selector);
+}
+
+function refresh(){
+  window.location.reload();
+}
+
+function StatBuilder_addSMTick(media){
+  if(<%= Rails.env.production? %>){
+    $.ajax({
+      type: "PATCH",
+      url: '/stat_objects/tick_media/'+media,
+    });
+  }
+}
+
+/////////////////////////////////
+
+window.onload = function(){
+
+}

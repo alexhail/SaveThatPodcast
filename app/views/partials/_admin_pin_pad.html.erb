@@ -1,0 +1,71 @@
+<div class="admin-pin-pad-wrapper">
+  <div id="admin-pin-pad">
+    <p>Please enter the administrative pin code</p>
+    <%= render partial: 'partials/flash', locals: { flash: flash, type: "login" } %>
+    <%= text_field_tag "admin-password", nil, type: 'password', readonly: :true, autocomplete: :off %>
+    <ul class="number-list">
+      <li class="number">1</li>
+      <li class="number">2</li>
+      <li class="number">3</li>
+      <li class="number">4</li>
+      <li class="number">5</li>
+      <li class="number">6</li>
+      <li class="number">7</li>
+      <li class="number">8</li>
+      <li class="number">9</li>
+      <li class="number back"><i class="fas fa-arrow-left"></i></li>
+      <li class="number">0</li>
+      <li class="number clear">Clear</li>
+    </ul>
+    <%= link_to "Enter", "#", class: "admin-pin-pad-button" %>
+  </div>
+</div>
+
+<% content_for :javascript do %>
+<script>
+    $(document).ready(function(e){
+      if (typeof pins === 'undefined' || pins === null) {
+        var pins = document.querySelectorAll("#admin-pin-pad > ul > li");
+        var input = document.querySelector("input#admin-password");
+
+        for(let i = 0; i < pins.length; i++){
+          pins[i].addEventListener("click", function(e){
+            let oldValue = input.getAttribute("value");
+
+            if(pins[i].classList.contains("back")){
+              if(oldValue) {
+                input.setAttribute("value", oldValue.slice(0, -1));
+              }
+            } else if(pins[i].classList.contains("clear")) {
+              input.setAttribute("value", "");
+            } else {
+              if(oldValue) {
+                input.setAttribute("value", input.getAttribute("value") + pins[i].innerHTML)
+              } else {
+                input.setAttribute("value", pins[i].innerHTML)
+              }
+            }
+          });
+        }
+
+        $("a.admin-pin-pad-button").click(function(e){
+          e.preventDefault();
+
+          $.ajax({
+            type: "POST",
+            url: "/admin",
+            data: {
+              "pin": $("input#admin-password").val()
+            },
+            success: function(response) {
+              console.log(response);
+            },
+            error: function(response) {
+              console.log(response);
+            }
+          });
+        });
+      }
+    });
+</script>
+<% end %>

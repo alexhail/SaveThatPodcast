@@ -1,0 +1,128 @@
+<div id="episode-blocks">
+  <img src="<%= asset_url("save-that-logo.png") %>" width=320 height=260>
+  <div class="block-list-scroller">
+    <ul class="block-list">
+      <% @episodes.each do |episode| %>
+        <a href="<%= episode_path(episode._id) %>">
+          <li class="block episode-<%= episode.try(:_eid) %>"><%= episode.try(:_eid) %></li>
+        </a>
+      <% end %>
+    </ul>
+    <div class="caret left"><i class="fas fa-caret-left"></i></div>
+    <div class="caret right"><i class="fas fa-caret-right"></i></div>
+  </div>
+</div>
+<h5 class="full-site-tip">[ Press space or enter for full site ]</h5>
+
+<% content_for :javascript do %>
+  <script>
+    $(document).ready(function(e){
+      window.addEventListener("keyup", function(e){
+        switch(e.keyCode){
+          case 13:
+          case 32:
+            window.location = "/episodes"
+            break;
+          default:
+        }
+      });
+
+      let blockDim = parseInt($("ul.block-list li").css("width"));
+      let getLeftPosition = () => { return parseInt($("ul.block-list").css("left")); }
+      let currentLeftPosition = getLeftPosition();
+      let blockListLength = <%= @episodes.size %>;
+      let startOffset = (blockDim * blockListLength) - (7 * blockDim);
+      let blockListStart = currentLeftPosition - startOffset;
+      var scrollDisance = blockDim * 5;
+
+      let leftPositionCorrection = () => {
+        $("ul.block-list").velocity({
+          left: blockDim + "px",
+        }, {
+          duration: 500,
+          easing: "ease-in-out",
+        });
+      }
+
+      let rightPositionCorrection = () => {
+        $("ul.block-list").velocity({
+          left: 0 - ((blockListLength*blockDim)-7*blockDim) + "px",
+        }, {
+          duration: 500,
+          easing: "ease-in-out",
+        });
+      }
+
+      let leftPositionErrorCheck = () => {
+        $("ul.block-list").velocity("stop", true);
+        if(getLeftPosition() > blockDim) leftPositionCorrection();
+      }
+
+      let rightPositionErrorCheck = () => {
+        $("ul.block-list").velocity("stop", true);
+        if(getLeftPosition() < 0 - ((blockListLength*blockDim)-7*blockDim)) rightPositionCorrection();
+      }
+
+
+      let horizonalScrollOptsLeft = {
+        duration: 500,
+        easing: "ease-in-out",
+        complete: leftPositionErrorCheck()
+      }
+
+      let horizonalScrollOptsRight = {
+        duration: 500,
+        easing: "ease-in-out",
+        complete: rightPositionErrorCheck()
+      }
+
+      $("ul.block-list").css("left", blockListStart);
+
+      $(window).keyup((e) => {
+        if(e.which == 37){
+          $("ul.block-list").velocity({
+            left: "+="+scrollDisance+"px"
+          }, horizonalScrollOptsLeft);
+        } else if (e.which == 39){
+          $("ul.block-list").velocity({
+            left: "-="+scrollDisance+"px"
+          }, horizonalScrollOptsRight);
+        }
+      });
+
+      $("div.caret.left").click((e) => {
+        if(!(getLeftPosition()+(blockDim*5) >= blockDim)){
+          $("ul.block-list").velocity({
+            left: "+="+scrollDisance+"px"
+          }, horizonalScrollOptsLeft);
+        } else {
+          $("ul.block-list").velocity({
+            left: blockDim+"px"
+          }, horizonalScrollOptsLeft);
+        }
+      });
+
+      $("div.caret.right").click((e) => {
+        if(getLeftPosition()-(blockDim*5) >= 0 - ((blockListLength*blockDim)-7*blockDim)){
+          $("ul.block-list").velocity({
+            left: "-="+scrollDisance+"px"
+          }, horizonalScrollOptsRight);
+        } else {
+          $("ul.block-list").velocity({
+            left: 0 - ((blockListLength*blockDim)-7*blockDim)+"px"
+          }, horizonalScrollOptsLeft);
+        }
+      });
+    });
+  </script>
+<% end %>
+
+<% content_for :stylesheet do %>
+    <style>
+      <% @episodes.each do |episode| %>
+        div#episode-blocks  ul.block-list a > li.block.episode-<%= episode._eid %>:hover {
+          background-color: <%= episode.color %> !important;
+        }
+      <% end %>
+    </style>
+<% end %>

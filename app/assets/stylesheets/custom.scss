@@ -1,0 +1,107 @@
+$bg: #020606; // Rich Black - rgba(2, 6, 6, 1)
+$font-color: rgba(255, 255, 255, 1);
+
+html, body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: $bg;
+  color: $font-color;
+  overflow: hidden;
+  overflow-y: auto;
+
+  section.splash-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+
+    div.splash-background-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+      background-image: asset_url('bg2.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+
+      animation: custom-bg-fade;
+      animation-delay: 5s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: forwards;
+      animation-iteration-count: infinite;
+      animation-duration: 20s;
+
+      @keyframes custom-bg-fade {
+        0% {
+          opacity: 1
+        }
+        20% {
+          opacity: 0
+        }
+        70% {
+          opacity: 0
+        }
+        100% {
+          opacity: 1
+        }
+      }
+    }
+  }
+
+  section.content {
+    margin-top: 45px;
+    padding-top: 45px;
+    
+    h1 {
+      margin-bottom: 35px;
+    }
+  }
+
+  background-image: asset_url('bg4hr.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: bottom;
+
+  a {
+    color: inherit;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+    margin: 0;
+    text-align: center;
+  }
+
+  form {
+
+    div.form-actions {
+
+    }
+  }
+}
+
+h1 {
+  text-align: center;
+}
+
+.centered {
+  display: block !important;
+  margin: 0 auto;
+}
+
+#admin-pin-pad > a {
+  text-decoration: none;
+}
+
+section.dashboard > table > tbody > tr > td > div > a {
+  text-decoration: none;
+}
+
+section.content > div > div > div.panel.panel_description > div > p > a {
+  text-decoration: none;
+}

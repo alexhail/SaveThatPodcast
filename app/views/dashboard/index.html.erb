@@ -1,0 +1,151 @@
+<section class="dashboard">
+  <h1>Admin Dashboard</h1>
+  <%= render "navigation" %>
+  <div class="content">
+    <div class="row">
+      <div class="panel">
+        <%= form_for(@settings, method: :patch, html: { autocomplete: :off }) do |f| %>
+        <h3>Administrative Actions</h3>
+        <hr></hr>
+        <ul>
+          <li>Font<%= f.select :font, options_for_select(@font_options, @font_options[0]) %></li>
+          <li>Add a new font <%= text_field_tag :new_font %><a id="add-new-font"href="#" style="float:right;margin-right: 30px;" class="button primary">Add New Font</a> <p>Google font names only</p></li>
+          <li>
+            Font color <input id="edit-color" class="settings" type="text"><%= f.hidden_field :color %>
+          </li>
+          <li>
+            Website background image <%= text_field_tag :background_image, @background_image == "/assets/bg4hr-d4ac08c03e481992eae768c57aa38f65286db6dddabcd572dd0c66e880993d7f.jpg" ? "default" : @background_image %>
+            <p>For security reasons please only host files on imgur --> <a href="https://imgur.com/">https://imgur.com/</a></p>
+            <p>Use a direct link to a background, i.e. <a href="https://i.imgur.com/FUsyxR5.jpg" style="text-transform: underline;">https://i.imgur.com/FUsyxR5.jpg</a></p>
+            <p>The server will block any image not hosted at https://i.imgur.com/</p>
+            <p>Type 'default' to go back to the default background image</p>
+          </li>
+          <li>
+            Change admin pin <%= password_field_tag :admin_pin, @admin_pin %>
+            <p>Preview pin <%= check_box_tag :preview_pin, false %></p>
+          </li>
+        </ul>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% content_for :javascript do %>
+<script>
+  $(document).on("turbolinks:load", function(){
+    $('#admin_pin_preview').html($('input#admin_pin').val());
+
+    // Make sure the stats are up to date
+    $.ajax({
+      type: "PATCH",
+      url: '/stat_objects/init'
+    });
+  });
+
+  $('select#setting_font').change(function(){
+    let params = {
+      "font": $(this).val().split(" ").join("+")
+    }
+
+    $.ajax({
+      type: "PATCH",
+      url: '/settings/:id',
+      data: params
+    });
+  });
+
+  $("#edit-color").spectrum({
+    color: "<%= @settings.color %>",
+    showInput: true,
+    allowEmpty: false,
+    preferredFormat: "hex",
+    change: function(color){
+      $('#setting_color').val(color.toHexString());
+
+      let params = {
+        "color": color.toHexString()
+      }
+
+      $.ajax({
+        type: "PATCH",
+        url: '/settings/:id',
+        data: params
+      });
+    }
+  });
+
+  $('input#background_image').click(function(){
+    if($(this).val() == "Default Background"){
+      $(this).val("");
+    }
+  });
+
+  $('input#preview_pin').click(function(){
+    $('input#admin_pin').attr('type', this.checked ? 'text' : 'password');
+  });
+
+  $('input#admin_pin').change(function(){
+    let params = {
+      "pin": parseInt($(this).val())
+    }
+
+    $.ajax({
+      type: "PATCH",
+      url: '/settings/:id',
+      data: params
+    });
+  });
+
+  $('input#background_image').change(function(){
+    if($(this).val().replace(/\s+/g, '') !== ""){
+
+      if($(this).val() === "default"){
+        $('body').css("background-image", "/assets/bg4hr-d4ac08c03e481992eae768c57aa38f65286db6dddabcd572dd0c66e880993d7f.jpg");
+
+        let params = {
+          "background_image": "/assets/bg4hr-d4ac08c03e481992eae768c57aa38f65286db6dddabcd572dd0c66e880993d7f.jpg"
+        }
+
+        $.ajax({
+          type: "PATCH",
+          url: '/settings/:id',
+          data: params
+        });
+      } else {
+        $('body').css("background-image", $(this).val());
+
+        let params = {
+          "background_image": $(this).val()
+        }
+
+        $.ajax({
+          type: "PATCH",
+          url: '/settings/:id',
+          data: params,
+        });
+      }
+    }
+  });
+
+  $('a#add-new-font').click(function(){
+    let input = $('input#new_font');
+
+    if(input.val() !== ""){
+      let params = {
+        "new_font": input.val()
+      }
+
+      $.ajax({
+        type: "PATCH",
+        url: '/settings/:id',
+        data: params,
+        success: function(){
+          refresh();
+        }
+      })
+    }
+  });
+
+</script>
+<% end %>

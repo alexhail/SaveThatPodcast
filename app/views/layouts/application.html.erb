@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Save That Podcast</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <% @settings.font.each do |f| %>
+      <link href="https://fonts.googleapis.com/css?family=<%= f %>" rel="stylesheet">
+    <% end %>
+
+    <%= favicon_link_tag asset_path('favicon.ico'), :rel => 'icon', :type => "image/x-icon" %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= yield %>
+    <%= render_partial(:top_left_nav) %>
+    <%= render_partial(:navigation) %>
+    <%= render_partial(:flash, { type: :app }) %>
+    <%= render_partial(:admin_link) unless admin_signed_in? %>
+  </body>
+
+  <% if content_for?(:stylesheet) %>
+    <%= yield(:stylesheet) %>
+  <% end %>
+
+  <style>
+
+    /* General Settings */
+    html, body {
+      font-family: "<%= @settings.font[0].split('+').join(' ') %>", sans-serif;
+      color: <%= @settings.color %>;
+    }
+
+    body {
+      <% unless @settings.background_image.empty? %>
+        background-image: url('<%= @settings.background_image %>');
+      <% end %>
+    }
+
+  </style>
+
+  <% if content_for?(:javascript) %>
+    <%= yield(:javascript) %>
+  <% end %>
+</html>

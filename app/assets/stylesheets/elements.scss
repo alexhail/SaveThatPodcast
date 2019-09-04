@@ -1,0 +1,205 @@
+section.content, section.dashboard {
+
+  table {
+    background-color: rgba(0,0,0,0.8);
+    background-blend-mode: darken;
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 25px 0;
+    min-width: 600px;
+    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.5);
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  table.edit-hosts-table {
+    width: 80%;
+  }
+
+  th {
+    background-color: rgba(255,255,255,0.3);
+    text-align: center;
+    padding: 7px 15px;
+  }
+
+  th._hid {
+    width: 25px;
+  }
+
+  th.episodes {
+  }
+
+  td.titles {
+    max-width: 400px;
+  }
+
+  th.updated_at, th.created_at  {
+    width: 150px;
+  }
+
+  td {
+    border: 1px solid white;
+    text-align: center;
+  }
+
+  td.actions {
+
+    width: 100px;
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .fas[class*=fa] {
+      color: white;
+    }
+
+    div[class*=-action] {
+      display: inline-block;
+      width: 35px;
+      height: 25px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 25px;
+      color: white;
+      margin: 5px 2px;
+      border-radius: 2px;
+    }
+
+    div.edit-action {
+      background-color: #585EBA;
+    }
+
+    div.delete-action {
+      background-color: #FA4622;
+    }
+  }
+
+  td > div {
+    overflow: hidden;
+  }
+
+  form {
+    &:not(.admin-tools-form) {
+      display: inline-block;
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  .form-content {
+    width: 800px;
+    margin: 0 auto;
+
+    .form-row {
+      margin: 15px 0;
+
+      label {
+        display: inline-block;
+        padding-right: 10px;
+        width: 70px;
+      }
+
+      input[type=text], input#admin_pin {
+        background-color: black;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        padding: 5px;
+      }
+
+      select {
+        background-color: black;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        padding: 5px;
+      }
+
+      input#host_hid {
+        width: 18px;
+        text-align: center;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .form-actions {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .form-button {
+    display: block;
+    height: 35px;
+    padding: 5px 15px;
+    margin: 0 auto;
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      color: black;
+      background-color: white;
+    }
+  }
+
+  .button {
+    display: inline-block;
+    height: 37px;
+    padding: 0 15px;
+    font-size: 12px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 2px;
+    border: 1px solid white;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+
+    &.primary {
+      background-color: #585EBA;
+      text-decoration: none;
+    }
+
+    &.back {
+      margin: 20px auto;
+      width: 60px;
+    }
+
+    &.red {
+      background-color: rgba(185, 5, 5, 1);
+    }
+
+    &.reset {
+      height: 35px;
+      margin-left: 30px;
+    }
+
+    &:hover {
+      color: black;
+      background-color: white;
+    }
+  }
+
+  .padded-i {
+    margin: 0 8px;
+  }
+
+  .flex-row {
+    display: flex;
+    width: 100%;
+  }
+}
+
+div.row {
+  display: flex;
+  justify-content: center;
+  width: 1000px;
+  margin: 0 auto;
+  background-color: #080808;
+
+  .panel {
+    flex-grow: 1;
+  }
+}
